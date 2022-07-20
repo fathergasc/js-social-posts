@@ -63,8 +63,9 @@ const posts = [
 
 const containerDom = document.getElementById("container");
 
-posts.forEach(element => {
-    containerDom.innerHTML += `<div class="post">
+// creates the posts in the DOM with the correct data
+posts.forEach((element) => {
+  containerDom.innerHTML += `<div class="post">
         <div class="post__header">
             <div class="post-meta">                    
                 <div class="post-meta__icon">
@@ -89,9 +90,42 @@ posts.forEach(element => {
                     </a>
                 </div>
                 <div class="likes__counter">
-                    Piace a <b id="like-counter-1" class="js-likes-counter">${element.likes}</b> persone
+                    Piace a <b id="like-counter-${element.id}" class="js-likes-counter">${element.likes}</b> persone
                 </div>
             </div> 
         </div>            
     </div>`;
 });
+
+const likeBtn = document.getElementsByClassName("js-like-button");
+console.log("likeBtn: ", likeBtn);
+const likesCounter = document.getElementsByClassName("js-likes-counter");
+console.log("likesCounter: ", likesCounter);
+
+const likedPosts = [];
+
+// The function adds an event listener on all the like buttons. If a like button is clicked, it toggles .like-button--liked class on the button, adds 1 to the likes counter and pushes the postid in an array to keep track of liked posts (only if not already present in it). If the button has been already clicked, it removes the class and subtracts 1 from the likes counter.
+likeBtnClick(likeBtn, likesCounter, likedPosts);
+
+console.log("likedPosts: ", likedPosts);
+
+// FUNCTIONS
+
+function likeBtnClick(elementsArray, countersArray, arrayToStoreLikedPosts) {
+  for (let i = 0; i < elementsArray.length; i++) {
+    elementsArray[i].addEventListener("click", function (event) {
+      event.preventDefault(); //prevents the empty <a> tag from jumping to the top of the page
+      if (elementsArray[i].classList.contains("like-button--liked")) {
+        countersArray[i].innerHTML = parseInt(countersArray[i].innerHTML) - 1;
+      } else {
+        countersArray[i].innerHTML = parseInt(countersArray[i].innerHTML) + 1;
+      }
+      elementsArray[i].classList.toggle("like-button--liked");
+
+      if (!arrayToStoreLikedPosts.includes(elementsArray[i].dataset.postid)) {
+        arrayToStoreLikedPosts.push(elementsArray[i].dataset.postid); // prevents duplicates IDs in the array
+      }
+      console.log("arrayToStoreLikedPosts: ", arrayToStoreLikedPosts);
+    });
+  }
+}
