@@ -1,3 +1,4 @@
+const profilePicDiv = document.getElementsByClassName("post-meta__icon");
 const posts = [
   {
     id: 1,
@@ -69,11 +70,13 @@ posts.forEach((element) => {
         <div class="post__header">
             <div class="post-meta">                    
                 <div class="post-meta__icon">
-                    <img class="profile-pic" src="${element.author.image}" alt="${element.author.name}">                    
+                    <img class="${profilePicDefault(element.author.image)}" src="${element.author.image}" alt="${firstLettersIfNull(element.author.image,element.author.name)}">                    
                 </div>
                 <div class="post-meta__data">
                     <div class="post-meta__author">${element.author.name}</div>
-                    <div class="post-meta__time">${YMDtoDMYdate(element.created)}</div>
+                    <div class="post-meta__time">${YMDtoDMYdate(
+                      element.created
+                    )}</div>
                 </div>                    
             </div>
         </div>
@@ -84,13 +87,17 @@ posts.forEach((element) => {
         <div class="post__footer">
             <div class="likes js-likes">
                 <div class="likes__cta">
-                    <a class="like-button  js-like-button" href="#" data-postid="${element.id}">
+                    <a class="like-button  js-like-button" href="#" data-postid="${
+                      element.id
+                    }">
                         <i class="like-button__icon fas fa-thumbs-up" aria-hidden="true"></i>
                         <span class="like-button__label">Mi Piace</span>
                     </a>
                 </div>
                 <div class="likes__counter">
-                    Piace a <b id="like-counter-${element.id}" class="js-likes-counter">${element.likes}</b> persone
+                    Piace a <b id="like-counter-${
+                      element.id
+                    }" class="js-likes-counter">${element.likes}</b> persone
                 </div>
             </div> 
         </div>            
@@ -108,6 +115,8 @@ const likedPosts = [];
 likeBtnClick(likeBtn, likesCounter, likedPosts);
 
 console.log("likedPosts: ", likedPosts);
+
+
 
 // FUNCTIONS
 
@@ -130,10 +139,30 @@ function likeBtnClick(elementsArray, countersArray, arrayToStoreLikedPosts) {
   }
 }
 
-
 //converts a date in YYYY-MM-DD format to DD/MM/YYYY format
-function YMDtoDMYdate (dateString) {
-    dateString = dateString.split("-").reverse().join("/");
-    return dateString;
+function YMDtoDMYdate(dateString) {
+  dateString = dateString.split("-").reverse().join("/");
+  return dateString;
 }
-    
+
+//changes the class of the div containing the profile picture based on the presence of an image in posts.author.image.
+function profilePicDefault(imageString) {
+  if (imageString == null) {
+    return "profile-pic-default";
+  } else {
+    return "profile-pic";
+  }
+}
+
+
+//If the image is null, it returns the first letters of the name of the author of the post as the alt attribute of the image instead of the full name.
+function firstLettersIfNull(imageString, nameString) {
+  if (imageString == null) {
+    const arrayFromString = nameString.split(" ");
+    const firstLetters = arrayFromString.map((word) => word[0]);
+    let firstLettersJoin = firstLetters.join("");
+    return firstLettersJoin;
+  } else {
+    return nameString;
+  }
+}
