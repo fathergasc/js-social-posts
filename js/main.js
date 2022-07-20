@@ -73,7 +73,7 @@ posts.forEach((element) => {
                 </div>
                 <div class="post-meta__data">
                     <div class="post-meta__author">${element.author.name}</div>
-                    <div class="post-meta__time">${element.created}</div>
+                    <div class="post-meta__time">${YMDtoDMYdate(element.created)}</div>
                 </div>                    
             </div>
         </div>
@@ -129,3 +129,11 @@ function likeBtnClick(elementsArray, countersArray, arrayToStoreLikedPosts) {
     });
   }
 }
+
+
+//converts a date in YYYY-MM-DD format to DD/MM/YYYY format
+function YMDtoDMYdate (dateString) {
+    dateString = dateString.split("-").reverse().join("/");
+    return dateString;
+}
+    
