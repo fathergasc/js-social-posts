@@ -1,4 +1,3 @@
-const profilePicDiv = document.getElementsByClassName("post-meta__icon");
 const posts = [
   {
     id: 1,
