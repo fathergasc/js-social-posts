@@ -62,20 +62,19 @@ const posts = [
 ];
 
 const containerDom = document.getElementById("container");
+const profilePicDiv = document.getElementById("profile-pic-div");
 
 // creates the posts in the DOM with the correct data
 posts.forEach((element) => {
   containerDom.innerHTML += `<div class="post">
         <div class="post__header">
             <div class="post-meta">                    
-                <div class="post-meta__icon">
-                    <img class="${profilePicDefault(element.author.image)}" src="${element.author.image}" alt="${firstLettersIfNull(element.author.image,element.author.name)}">                    
+                <div id="profile-pic-div" class="post-meta__icon">
+                    ${generateAvatar(element.author.image,element.author.name)}             
                 </div>
                 <div class="post-meta__data">
                     <div class="post-meta__author">${element.author.name}</div>
-                    <div class="post-meta__time">${YMDtoDMYdate(
-                      element.created
-                    )}</div>
+                    <div class="post-meta__time">${YMDtoDMYdate(element.created)}</div>
                 </div>                    
             </div>
         </div>
@@ -115,8 +114,6 @@ likeBtnClick(likeBtn, likesCounter, likedPosts);
 
 console.log("likedPosts: ", likedPosts);
 
-
-
 // FUNCTIONS
 
 function likeBtnClick(elementsArray, countersArray, arrayToStoreLikedPosts) {
@@ -133,7 +130,11 @@ function likeBtnClick(elementsArray, countersArray, arrayToStoreLikedPosts) {
       if (!arrayToStoreLikedPosts.includes(elementsArray[i].dataset.postid)) {
         arrayToStoreLikedPosts.push(elementsArray[i].dataset.postid); // prevents duplicates IDs in the array
       } else {
-        arrayToStoreLikedPosts.splice(arrayToStoreLikedPosts.indexOf(elementsArray[i].dataset.postid), 1 ); }// removes the ID from the array
+        arrayToStoreLikedPosts.splice(
+          arrayToStoreLikedPosts.indexOf(elementsArray[i].dataset.postid),
+          1
+        );
+      } // removes the ID from the array
       console.log("arrayToStoreLikedPosts: ", arrayToStoreLikedPosts);
     });
   }
@@ -154,15 +155,19 @@ function profilePicDefault(imageString) {
   }
 }
 
+//it returns the first letters of the name of the author of the post 
+function firstLetters(nameString) {
+  const arrayFromString = nameString.split(" ");
+  const firstLetters = arrayFromString.map((word) => word[0]);
+  let firstLettersJoin = firstLetters.join("");
+  return firstLettersJoin;
+}
 
-//If the image is null, it returns the first letters of the name of the author of the post as the alt attribute of the image instead of the full name.
-function firstLettersIfNull(imageString, nameString) {
+//generates the div or the img tag containing the profile picture or the first letters of the name of the author of the post based on the presence of an image in posts.author.image.
+function generateAvatar(imageString, nameString) {
   if (imageString == null) {
-    const arrayFromString = nameString.split(" ");
-    const firstLetters = arrayFromString.map((word) => word[0]);
-    let firstLettersJoin = firstLetters.join("");
-    return firstLettersJoin;
+    return `<div class="profile-pic-default">${firstLetters(nameString)}</div>`;
   } else {
-    return nameString;
+    return `<img class="profile-pic" src="${imageString}" alt="${nameString}">`;
   }
 }
