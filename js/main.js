@@ -132,7 +132,8 @@ function likeBtnClick(elementsArray, countersArray, arrayToStoreLikedPosts) {
 
       if (!arrayToStoreLikedPosts.includes(elementsArray[i].dataset.postid)) {
         arrayToStoreLikedPosts.push(elementsArray[i].dataset.postid); // prevents duplicates IDs in the array
-      }
+      } else {
+        arrayToStoreLikedPosts.splice(arrayToStoreLikedPosts.indexOf(elementsArray[i].dataset.postid), 1 ); }// removes the ID from the array
       console.log("arrayToStoreLikedPosts: ", arrayToStoreLikedPosts);
     });
   }
